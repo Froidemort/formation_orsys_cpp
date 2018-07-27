@@ -1,0 +1,11 @@
+
+Taille du tableau : 5
+sizeof (Entiers)  : 20
+ou encore         : 20
+erreur debordement: array::at: __n (which is 5) >= _Nm (which is 5)
+
+element 0 : 666
+element 1 : 32767
+element 2 : 4197679
+element 3 : 0
+element 4 : 2

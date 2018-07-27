@@ -1,0 +1,15 @@
+(debug) main(): Fonction de Debug() activee
+(debug) f(-): debut avec i >500<   c >-<
+(debug) f(-): quitte avec Inutile.size() >500<
+(debug) f(.): debut avec i >500<   c >.<
+(debug) f(.): quitte avec Inutile.size() >500<
+(debug) f(~): debut avec i >500<   c >~<
+(debug) main(): tous les threads sont crees
+(debug) f(~): quitte avec Inutile.size() >500<
+(debug) f(?): debut avec i >500<   c >?<
+(debug) f(?): quitte avec Inutile.size() >500<
+(debug) f(+): debut avec i >500<   c >+<
+(debug) f(+): quitte avec Inutile.size() >500<
+(debug) f(o): debut avec i >500<   c >o<
+(debug) f(o): quitte avec Inutile.size() >500<
+(debug) main(): fin normale du programme

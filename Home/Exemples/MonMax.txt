@@ -1,0 +1,7 @@
+MonMax = 4
+MonMax = 3.14
+MonMax = ab
+MonMax = ab
+MonMax = ZA
+MonMax = 3.14
+MonMax = 3

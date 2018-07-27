@@ -1,0 +1,106 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <numeric>
+#include <stdexcept>
+
+using std::cout;
+
+int main()
+{
+    std::vector<int> v;            // creer un tableau d'entiers vide
+    v.push_back( 10 );             // ajouter l'entier 10 a la fin
+    cout << v.front() << '\n';     // afficher le premier element
+    cout << v.back() << '\n';      // afficher le dernier element
+    v.pop_back();                  // enlever le dernier element
+    if ( v.empty() ) {             // le tableau est vide
+        cout << "Tout est normal : tableau vide\n";
+    }
+
+    v.resize( 10 );                // redimensionne le tableau
+                                   // resize() initialise tous les nouveaux entiers a 0
+    cout << v.size() << '\n';      // affiche la nouvelle taille
+    v[ 9 ] = 5;                    // on peut acceder librement aux elements
+    
+    std::fill( v.begin(), v.end(), 112 ); // initialise tous les elements a 112
+
+    v.clear();                     // vider le tableau (size() == 0)
+
+    v.reserve( 50 );                // on va inserer 50 elements
+    // reserver (allouer) de la place pour au moins 50 elements
+
+    // verifier que la taille n'a pas bouge (vide)
+    cout << v.size() << '\n';
+
+    // capacite du tableau = nombre d'elements qu'il peut stocker
+    // sans devoir reallouer (modifie grace a reserve())
+    cout << v.capacity() << '\n'; // au moins 50, surement plus
+
+    for ( int i = 0; i < 50; ++i )
+    {
+        // grace a reserve() on economise de multiples reallocations
+        // du fait que le tableau grossit au fur et a mesure
+        v.push_back( i );
+    }
+
+    // afficher la nouvelle taille
+    cout << v.size() << '\n'; // affiche 50
+
+    // rechercher l'element le plus grand (doit etre 49)
+    cout << *std::max_element( v.begin(), v.end() ) << '\n';
+
+    // tronquer le tableau a 5 elements
+    v.resize( 5 );
+
+    // les trier par ordre croissant
+    std::sort( v.begin(), v.end() );
+
+    // parcourir le tableau trie
+    for ( size_t i = 0, size = v.size(); i < size; ++i )
+    {
+        // attention : utilisation de l'operateur []
+        // les acces ne sont pas verifies, on peut deborder !
+        cout << v[ i ] << '\t';        
+    }
+    cout << '\n';
+
+    // utilisation de at() : les acces sont verifies
+    try
+    {
+        v.at( v.size() ) = 10; // acces en dehors des limites !
+    }
+    catch ( const std::out_of_range & )
+    {
+        cout << "at() a leve une exception std::out_of_range\n";
+    }
+
+    // parcours avec un iterateur en inverse
+    for ( std::vector<int>::reverse_iterator i = v.rbegin();
+          i != v.rend();
+            ++i )
+    {
+        cout << *i << '\t';
+    }
+    cout << '\n';
+
+    
+    std::vector<int> v2( 10 );  // on cree un tableau v2 de taille 10
+    v2.at( 9 ) = 5; // correct, le tableau est de taille 10
+
+    // on cree un tableau v3 de 10 elements initialises a 20
+    std::vector<int> v3( 10, 20 );
+
+    // faire la somme de tous les elements de v3
+    // on doit obtenir 200 (10 * 20)
+    cout << std::accumulate( v3.begin(), v3.end(), 0 ) << '\n';
+
+    // on recopie v3 dans v
+    v = v3;
+
+    // on verifie la recopie
+    if ( std::equal( v.begin(), v.end(), v3.begin() ) )
+    {
+        cout << "v est bien une copie conforme de v3\n";
+    }
+}
+

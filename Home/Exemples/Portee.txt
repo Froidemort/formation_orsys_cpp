@@ -1,0 +1,8 @@
+dans f(): i=4
+dans f(): ::i=1
+dans f(): entete::i=2
+dans main(): i=1
+dans for(;;): i=13
+dans main(): i=5
+dans main(): k=3
+ ... et j=1 n=2

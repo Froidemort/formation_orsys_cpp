@@ -1,0 +1,33 @@
+# Fichier './Joueur/Makefile'             -    4 liens physiques
+# Fichier './Greed/Makefile'
+# Fichier './Corriges/Joueur/Makefile'    -    Version avec tableau de Joueur*
+# Fichier './Corriges/Greed/Makefile'     -    Version avec std::vector<>
+
+CXX   := g++ -Wall --std=c++11
+PRG   := Greed
+OBJ   := Joueur.o Tour.o Rand.o Greed.o
+CORE  := Makefile include/*.h
+
+help:
+	@printf "\n"
+	@printf "make %-10s : %s\n" "[help]" "Cette page d'aide"
+	@printf "make %-10s : %s\n" "test" "Compile et teste le projet"
+	@printf "make %-10s : %s\n" "compile" "Compilation seule"
+	@printf "make %-10s : %s\n" "$(PRG)"  "        id."
+	@printf "make %-10s : %s\n" "cleanrep"  "Nettoie le repertoire du projet"
+	@printf "\n"
+
+$(PRG): $(OBJ)
+	$(CXX) -o $(PRG) $(OBJ)
+
+test: $(PRG)
+	@./$(PRG)
+	@echo
+
+cleanrep:
+	@rm -f *.o $(PRG) *~ $(OBJ)
+
+%.o: src/%.cpp $(CORE)
+	$(CXX) -c -o $*.o $<
+
+# Fin de Makefile

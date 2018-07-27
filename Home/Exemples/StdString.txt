@@ -1,0 +1,14 @@
+Marylin size()=7 max_size()=1073741820
+Marylin Monroe size()=14
+ajoute 3 '.' pour obtenir: Marylin Monroe...
+retire 4 caracteres: Marylin Monro
+a compter de la position 8, remplace 3 caracteres par 1 's': Marylin sro
+efface les 2 premiers caracteres: rylin sro
+insere 1 fois 'l' en position 2: ryllin sro
+remplace 2 caracs en position 0: nillin sro
+insere au milieu: nillin sinedro
+retire 2 caracteres: nillin sined
+insere 'a' en position 2: niallin sined
+met 'G' position 6: nialliG sined
+passe en majuscule le caractere 12: nialliG sineD
+guess what ... Denis Gillain

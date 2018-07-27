@@ -1,0 +1,11 @@
+--> Debut de f est dans main()
+--> Debut de g est dans main()
+
+--> Copie de f est dans main()
+    foo1    f est dans main()
+<-- Fin de f est dans main()
+
+    foo2    g est dans main()
+
+<-- Fin de g est dans main()
+<-- Fin de f est dans main()

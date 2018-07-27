@@ -1,0 +1,24 @@
+// Fichier './Exemples/Polygone/Polygone.cpp.3'
+
+int Polygone::Aire( void ) const {
+    cerr << "Aire de polygone quelconque inconnue\n" ;
+    return 0 ;
+}
+
+const Polygone& Polygone::operator=( const Polygone& p) {
+
+//  cout << "(debug) appel de l'affectation" << endl ;
+
+    if ( this != &p ) {
+
+        int *tmp = new int [ p.NbCotes] ;
+        if ( NbCotes) delete [] TabLongueurs ;
+        TabLongueurs = tmp ;
+        NbCotes = p.NbCotes ;
+        for ( int i=0; i<NbCotes; i++)
+            SetCote( i, p.TabLongueurs[ i]) ;
+    }
+    return *this ;
+}
+
+// Fin de  './Exemples/Polygone/Polygone.cpp.3'

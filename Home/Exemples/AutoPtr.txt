@@ -1,0 +1,10 @@
+Constructeur de c0
+Constructeur de c1
+Constructeur de c2
+Constructeur de c3
+p3 pointe vers c3
+Destructeur de c3
+Apres destruction de c3 via p7
+Destructeur de c1
+c0 n'est jamais detruit :o(
+Destructeur de c2

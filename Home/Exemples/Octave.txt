@@ -1,0 +1,10 @@
+
+Soit une matrice M:
+ 11 12 13
+ 21 22 23
+ 31 32 33
+
+ Multipliee par 2:
+ 22 24 26
+ 42 44 46
+ 62 64 66

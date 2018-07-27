@@ -1,0 +1,3 @@
+Ctor foo( p0)
+ *** dans func(): p0
+Dtor ~foo() p0

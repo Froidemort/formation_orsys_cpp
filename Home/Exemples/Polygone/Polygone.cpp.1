@@ -1,0 +1,21 @@
+// Fichier './Exemples/Polygone/Polygone.cpp.1'
+
+Polygone::Polygone( int nb) {
+
+    NbCotes = nb ;
+    TabLongueurs = new int [ NbCotes] ;
+    for ( int i=0; i<NbCotes; i++)
+        SetCote( i, 0) ;
+}
+
+Polygone::Polygone( const Polygone &p) {
+
+//  cout << "(debug) constructeur de copie" << endl ;
+
+    NbCotes = p.NbCotes ;
+    TabLongueurs = new int [ NbCotes] ;
+    for ( int i=0; i<NbCotes; i++)
+        SetCote( i, p.TabLongueurs[ i]) ;
+}
+
+// Fin de  './Exemples/Polygone/Polygone.cpp.1'

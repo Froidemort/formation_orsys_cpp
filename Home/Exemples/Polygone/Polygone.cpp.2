@@ -1,0 +1,24 @@
+// Fichier './Exemples/Polygone/Polygone.cpp.2'
+
+void Polygone::SetCote( int numero, int longueur) {
+    if ( numero >= 0 && numero < NbCotes )
+        TabLongueurs[ numero] = longueur ;
+    else
+        cerr << "debordement dans SetCote()" << endl ;
+}
+
+int Polygone::Perimetre( void) const {
+    int somme = 0 ;
+    for ( int i=0; i<NbCotes; i++)
+        somme += TabLongueurs[ i] ;
+    return somme ;
+}
+
+void Polygone::Affiche( void ) const {
+    cout << "Polygone a " << NbCotes << " cotes:\t" ;
+    for ( int i=0; i<NbCotes; i++)
+        cout << " " << TabLongueurs[ i] ;
+    cout << endl ;
+}
+
+// Fin de  './Exemples/Polygone/Polygone.cpp.2'

@@ -1,0 +1,5 @@
+A cree: B::foo = 9
+A cree: B::foo = 9
+On a cree un 2ieme A
+B cree
+B::foo vaut 9

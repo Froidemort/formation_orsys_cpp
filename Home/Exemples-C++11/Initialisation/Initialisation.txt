@@ -1,0 +1,28 @@
+Appel au constructeur vide
+Appel au constructeur vide
+
+i==>0< (i n'est pas initialise)
+j==>5< (affectation valeur initiale)
+k==>0< (appel de ctor par defaut)
+l==>1< (ctor vide? appel de fonction?)
+m==>6< (ctor fonctionnel)
+n==>7< (ctor fonctionnel)
+o==>8< (initialisation uniforme)
+
+z==>666< (var. globale; init. uniforme)
+
+tab[ 1]==>5<
+tab[ 2]==>0< (non initialise)
+
+*(p+1)==>101<
+*(p+2)==>0< (non initialise)
+
+*(q+0)==>5<
+*(q+1)==>4<
+*(q+2)==>3<
+*(q+3)==>2<
+*(q+4)==>1<
+
+Appel au ctor a 2 entiers et initialisation uniforme
+Appel au ctor a 2 entiers et initialisation uniforme
+Appel au ctor a 2 entiers et initialisation uniforme

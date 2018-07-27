@@ -1,0 +1,16 @@
+
+system_clock: 
+- precision: 1 nano-seconde(s)
+- is_steady: false
+- sizeof   : 1
+
+steady_clock: 
+- precision: 1 nano-seconde(s)
+- is_steady: true
+- sizeof   : 1
+
+high_resolution_clock: 
+- precision: 1 nano-seconde(s)
+- is_steady: false
+- sizeof   : 1
+

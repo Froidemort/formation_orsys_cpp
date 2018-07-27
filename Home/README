@@ -1,0 +1,81 @@
+# Fichier '~jack/C++/Home/README'
+
+README
+------
+
+Ce fichier "README" decrit le repertoire du participant au cours (repertoire 'Home')
+
+Ce repertoire d'accompagnement est egalement decrit par une annexe au support de cours
+
+La derniere version du repertoire du participant est egalement telechargeable
+depuis http://www.ellipsys.fr/download-public/C++.tar.gz
+
+Toute suggestion, toute correction, tout commentaire est bienvenu. Pour cela n'hesitez pas
+a envoyer un e-mail a 'cours.CPP@ellipsys.fr'
+
+
+
+
+
+LICENCE.txt
+-----------
+
+Ce repertoire est a diffusion "Libre" au sens des licences habituelles du GNU. Pour plus de
+precision le texte exact est dans le fichier "LICENCE.txt"
+
+
+
+
+
+profile
+-------
+
+Pour memoire, quelques variables d'environnement utilisees par le compilateur du GNU (gcc)
+
+
+
+
+
+Makefile
+--------
+
+Permet la maintenance du repertoire du stagiaire
+
+Pour plus d'informations taper 'make' ou 'make help'
+
+
+
+
+
+Repertoires predefinis
+----------------------
+
+o ./Exemples et ./Exemples-C++11
+  Exemples tels qu'ils sont inclus dans les supports des cours C++ et C++11.
+  Ce repertoire contient les sources et les resultats d'execution du support.
+
+o ./Vrac et ./Vrac-C++11:
+  Repertoire de programmes a l'etat experimental.
+
+o ./Corriges et ./Corriges-C++11:
+  Les corrections proposees pour les exercices des supports de cours.
+  Ces corrections ont ete realisees initialement pour un Linux/Debian/GNU gcc 4.3 en ce
+  qui concerne C++ et pour Linux/Debian/GNU gcc 6.1.1 pour le cours C++11. Elles sont
+  a priori valables sur d'autres plate-formes.
+
+o ./Documentation: Quelques docs (manuels, liens...)
+
+
+
+
+
+Autres Repertoires
+------------------
+
+Ils contiennent les exercices proposes dans le support de cours.
+
+Chaque exercice est associe a un repertoire. Dans le cas general,
+ce repertoire contient un ou des fichiers sources, et un Makefile
+pour la compilation.
+
+# Fin de '~jack/C++/Home/README'                   Denis Gillain (http://www.ellipsys.fr)

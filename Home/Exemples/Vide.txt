@@ -1,0 +1,6 @@
+identi( 6)==6
+
+sizeof a ==1
+octet 1: >^@<
+octet 1: >0<
+octet '\0': >^@<

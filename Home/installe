@@ -1,0 +1,561 @@
+#!/bin/sh
+
+# Ce fichier est recopie par 'm home' dans les repertoires du stagiaire des cours ELLIPSYS
+#   Du coup, il n'y a pas besoin de creer de liens symboliques. Par contre le repertoire
+#      du stagiaire 'Home' contient la version au jour de la generation du repertoire		-MMOB-
+
+	ORIGINAL="bizet:~toor/bin/installe"
+#             ------------------------
+	VERSION="3.4.15 - 22 febbraio 2018"
+	AUTEUR="Denis Gillain - http://www.ellipsys.fr"
+
+# Installation de l'environnement des cours                <<  E  L  L  I  P  S  Y  S  >>
+#
+# o A lancer par 'ksh ./installe' ou par le shebang
+# o Pas de caractere accentue
+# o fichier au format UNIX : '\n' = <nl> = 10 = \012 = ^J
+#
+
+#
+# Creation le 25 fevrier 2005 pour Linux/Debian
+# Adaptation SunOS et NIS le 11 mars 2005 (chez Orsys)
+# Tests et adaptations mineures le 24 mars 2005 (chez Orsys)
+# Cree/Ecrase le '.profile' des utilisateurs le 30 septembre 2005
+# Detecte une archive plutot que d'obliger a un nom par defaut: 10 octobre 2005
+# Adaptation AIX le 21 novembre 2005. Possibilite de selectionner le prefixe des utilisateurs ("user" par defaut)
+# Autorise l'installation de n'importe quel fichier '*.tar*': version 2.6 - 21 marzo 2006
+# Adaptation HP-UX le Vendredi 13 ottobre 2006 - Bruxelles: Swisslife - 2.7
+# change le '.profile', car bash ne lit pas .bashrc en cas de connexion (2.8)
+# utilise 'less' comme PAGER quand 'less' est installe (2.9)
+# separe la connexion bash: '.bash_profile' puis '.bashrc' de celle de ksh: '.profile' puis '$ENV'
+# refonte de l'architecture pour faciliter la maintenance: 30 giugno 2007, Version 3.0.0
+# corrige un bug qui m'a tout efface et ajout de l'option '--zero' 15 luglio 2007, version 3.1.0
+# copie l'archive dans ${TMP} avant de l'installer
+# Version 3.2.3: ameliore le .profile, et test sur AIX(5.2)/ksh (unedic nantes)
+# Version 3.3.3: ajoute la configuration de 'vi' dans le .profile
+# Version 3.3.4: ajoute '-n' dans PROMPT_COMMAND
+# Version 3.3.5: ajoute l'alias 'lt' dans le .bashrc
+# Version 3.3.6: change le contenu de la variable ORIGINAL pour mentionner 'root@bizet' et non 'gillain@bruch'
+# Version 3.3.7: mentionne une eventuelle erreur de mot de passe en cas d'echec
+# Version 3.4.0: nouvelle adaptation Solaris 9 pour la PLM (shell Bourne ou jsh !)
+# Version 3.4.1: change shebang /bin/ksh devient /bin/sh.
+# Version 3.4.2: ajoute le commentaire expliquant que ce fichier est copie dans les repertoires ./Home par 'm home' -MMOB-
+#                et la commande 'xrandr' avec 'xset'
+# Version 3.4.3: ajoute le SHLVL dans le prompt PS1 de .bashrc
+# Version 3.4.4: change la presentation de l'entete
+# Version 3.4.5: change encore la presentation de l'entete
+# Version 3.4.6: change le nom du fichier en # debut et # fin
+# Version 3.4.7: remplace les [[ ... ]] par [ ... ] et 'function' par '()'
+# Version 3.4.8: verifie/corrige qu'il n'y a aucun 'echo' ni 'printf' hors des 'test -t 1' dans .profile et .bashrc
+# Version 3.4.9: ajoute le niveau d'imbrication du shell E2L_LVL
+# Version 3.4.10: corrige le bogue du niveau d'imbrication du shell E2L_LVL
+# Version 3.4.11: ajoute l'alias 'la' et un peu de 'debug' a titre experimental
+# Version 3.4.15: ajoute du debug pour voir les fichiers lus lors de 'su -' et 'sudo -s'
+
+
+# Retirer le '#' permet de verifier les codes d'erreur en sortie du programme, sans execution
+#fgrep 'exit' "${0}" | sed 's/.*exit/exit/' | sed 's/ *[";].*//' | sort -b +1n -2; exit 0
+
+# -MMOB- : Ce fichier est recopie simplement dans les differents repertoires ~jack/*/Home lors de la procedure qui fabrique
+#          les repertoires des stagiaires. Cela fait qu'on n'est pas sur d'avoir la derniere version dans les fichiers 
+#          Home.*.tar.gz distribues aux stagiaires, mais comment faire autrement...
+
+
+# Variables du programme: doivent etre declarees et non renseignees ici
+ARCHIVE=''					# Nom de l'archive a copier sur les comptes stagiaires
+PREFIXE_USER=''				# traite des utilisateurs 'prefixe'*
+SHELL_UTIL=''				# Shell detecte qui execute ce script
+SYST_UTIL=''				# Type de serveur detecte
+WHOAMI=''					# Commande whoami a utiliser
+A_UID=''					# UID de celui qui lance la commande
+PAGINEUR=''					# Pagineur a utiliser
+# DEBUG='oui'					# 'oui' quand le mode debug est actif
+NO_TAR=''					# 'oui' si on n'installe pas d'archive
+FORCE=''					# 'oui' pour forcer l'execution
+ZERO=''						# 'oui' remet a zero (efface) le $HOME du compte stagiaire
+TMP='/tmp'					# repertoire temporaire
+
+
+
+debug()
+{
+	if [ "${DEBUG}" = 'oui' ] ; then
+		echo "	(debug) $1"
+	fi
+}
+
+
+
+usage()
+{
+	CMD=`basename $0`
+	echo >&2
+	if [ "$1" != "" ] ; then echo >&2 "	$1" ; fi
+	echo >&2 "	usage: $CMD [-dvhf0] [-p prefixe] [-t tmp-rep] [{-n | tar-file}]"
+	echo >&2 
+}
+
+
+aide()
+{
+	usage
+	echo >&2 "	installe l'environnement de cours Unix"
+	echo >&2 "	a partir de 'tar-file' si l'archive n'est pas detectee"
+	echo >&2
+	if [ "${SHELL_UTIL}" = 'bash' ] ; then
+		echo >&2 "	-v | --version : affiche le numero de version et sort"
+		echo >&2 "	-h | --help    : affiche l'ecran d'aide et sort"
+		echo >&2 "	-d | --debug   : mode debug"
+		echo >&2 "	-f | --force   : force l'execution, sinon sort a la premiere erreur"
+		echo >&2 "	-n | --notar   : installation sans archive (de l'environnement seul)"
+		echo >&2 "	-0 | --zero    : vide le repertoire stagiaire avant installation"
+		echo >&2 "	-p 'zfor' | --prefixe='zfor' : utilise 'zfor' pour prefixe utilisateur"
+		echo >&2 "	-t 'rep' | --tmp='rep' : definit 'rep' comme repertoire temporaire"
+		echo >&2 "	                         (par defaut '${TMP}')"
+	else
+		echo >&2 "	-v        : affiche le numero de version et sort"
+		echo >&2 "	-h        : affiche l'ecran d'aide et sort"
+		echo >&2 "	-d        : mode debug"
+		echo >&2 "	-f        : force l'execution, sinon sort a la premiere erreur"
+		echo >&2 "	-n        : installation sans archive (des fichiers .profile...)"
+		echo >&2 "	-0        : vide le repertoire stagiaire avant installation"
+		echo >&2 "	-p 'zfor' : utilise 'zfor' pour prefixe utilisateur"
+		echo >&2 "	-t 'rep'  : definit 'rep' comme repertoire temporaire"
+		echo >&2 "	            (par defaut '${TMP}')"
+	fi
+	echo >&2
+}
+
+
+
+# ---------------------------------------------------------------------------------------------------
+# Scrute le systeme sur lequel tourne la procedure
+# ---------------------------------------------------------------------------------------------------
+
+# PATH utilise par cette commande. L'ancien est garde dans OLDPATH
+# Ce PATH sert de base pour crer celui des utilisateurs
+OLDPATH="$PATH"
+if [ ! -z "${ORACLE_HOME}" ] ; then
+	ORA=$(echo "${ORACLE_HOME}"'/bin' | sed 's"//*"/"g')
+	ORAVARS="
+`env | grep 'ORACLE_.*[^=]$'`
+export `env | grep 'ORACLE_.*[^=]$' | cut -f1 -d'=' | tr '\012' ' '`
+"
+	#echo "(debug) >$ORAVARS<"
+else
+	unset ORA
+	unset ORAVARS
+fi
+PAT=''
+for DIR in									\
+		/usr/kerberos/bin					\
+		/usr/local/bin						\
+		/usr/bin							\
+		/bin								\
+		/usr/local/sbin						\
+		/usr/sbin							\
+		/sbin								\
+		/usr/ucb							\
+		/usr/ccs/bin						\
+		/usr/dt/bin							\
+		/usr/openwin/bin					\
+		/usr/X11R6/bin						\
+		/usr/xpg4/bin						\
+		/usr/bin/X11						\
+		${ORA}								\
+		/usr/games
+do
+	if [ -L "$DIR" ] ; then
+		echo >&2 " WARN: lien symbolique ignore pour constituer le PATH: >$DIR<"
+	elif [ -d "${DIR}" -a -r "${DIR}" -a -x "${DIR}" ] ; then
+		# verifie que le repertoire n'est pas vide...
+		if [ `ls "${DIR}" | wc -l` -gt 0 ] ; then
+			if [ ! -z "${PAT}" ] ; then PAT="${PAT}"':' ; fi
+			PAT="${PAT}${DIR}"
+		fi
+	fi
+done
+PATH="${PAT}"
+
+
+
+# Cherche et positionne PAGINEUR
+if type less >/dev/null 2>&1 ; then
+	PAGINEUR='
+PAGER=less
+export PAGER
+'
+fi
+
+
+
+# Cherche et positionne WHOAMI (which ne dereference pas les liens symboliques)
+WHOAMI="`which whoami 2>/dev/null`"
+if [ "$?" -ne 0 ] ; then
+	WHOAMI="id | sed -e 's/).*$//' -e 's/.*(//'"
+fi
+
+
+
+# Identifie le shell utilise par cette procedure
+SHELL_UTIL=`ps | grep "$$" | awk '{ print $NF}' | sed -e 's".*/""' -e 's/^-//'`
+
+
+
+# S'assure in fine de la compatibilite avec les systemes testes
+SYST_UTIL="`uname`"
+debug "Systeme detecte: >$SYST_UTIL<"
+case "${SYST_UTIL}" in
+	"AIX" | "HP-UX")
+		A_UID="`id -u`"
+		T_N=''
+		T_C='\c'
+		TEMP=`getopt 0dfhnp:t:v $*`
+		if [ $? != 0 ] ; then debug "TEMP=>$TEMP<"; usage; exit 10 ; fi
+		;;
+
+	"SunOS")
+		A_UID="`/usr/xpg4/bin/id -u`"
+		T_N=''
+		T_C='\c'
+		TEMP=`getopt 0dfhnp:t:v $*`
+		if [ $? != 0 ] ; then debug "TEMP=>$TEMP<"; usage; exit 5 ; fi
+		;;
+
+	"Linux")
+		A_UID="`id -u`"
+		T_N='-n'
+		T_C=''
+		TEMP=`getopt -o 0dfhnp:t:v --long debug,force,help,notar,prefixe:,version,tmp:,zero -n $0 -- "$@"`
+		if [ $? != 0 ] ; then debug "TEMP=>$TEMP<"; usage; exit 11 ; fi
+		;;
+
+	*)
+		echo "Le systeme '$SYST_UTIL' n'a pas ete valide."	>&2
+		exit 8 ;;
+esac
+
+
+
+# ---------------------------------------------------------------------------------------------------
+# Traite les options
+# ---------------------------------------------------------------------------------------------------
+eval set -- "$TEMP"
+while true ; do
+	case "$1" in
+		-d|--debug) DEBUG='oui'; shift ;;
+		-n|--notar) NO_TAR='oui'; shift ;;
+		-f|--force) FORCE='oui'; shift ;;
+		-0|--zero)  ZERO='oui'; shift ;;
+		-v|--version|-V|--Version) echo "$VERSION" ; exit 0 ;;
+		-p|--prefixe)
+			if [ "${PREFIXE_USER}" != "" ] ; then
+				usage "L'option '-p' ne peut etre utilisee qu'une fois"
+				exit 13
+			fi
+			PREFIXE_USER="$2"
+			shift 2 ;;
+
+		-t|--tmp)
+			if [ "${__TMP__}" != "" ] ; then
+				usage "L'option '-t' ne peut etre utilisee qu'une fois"
+				exit 16
+			fi
+			__TMP__='une fois'
+			TMP="$2"
+			shift 2 ;;
+
+		-h|--help) aide ; exit 0 ;;
+		--) shift ; break ;;
+		\?)	# Ci dessous ne marche pas sous BASH - FAIRE
+			usage "L'option '-p' necessite un prefixe d'utilisateur, ou
+l'option '-t' necessite un nom de repertoire temporaire"
+			exit 15 ;;
+		*) echo >&2 "$0: erreur interne }t88ui{"; exit 2 ;;
+	esac
+done
+
+
+
+# Aucune information de DEBUG avant cette ligne,
+# sauf a activer DEBUG='oui' directement dans les variables au debut du script
+debug "Mode debug actif"
+debug "-----------------------"
+debug "Ancien PATH: >>>>>>>>>>>>>>>>>>>>
+`echo $OLDPATH|tr ':' '\012'`
+<<<<<<<<<<<<<<<<<<<<"
+debug "-----------------------"
+debug "Nouveau PATH: >>>>>>>>>>>>>>>>>>>>
+`echo $PATH|tr ':' '\012'`
+<<<<<<<<<<<<<<<<<<<<"
+debug "-----------------------"
+debug "Pagineur trouve: >$PAGINEUR<"
+debug "'whoami' trouvee: >$WHOAMI<"
+debug "essai de 'whoami': vous etes >`eval $WHOAMI`<"
+debug "Shell de cette procedure: >$SHELL_UTIL<"
+debug "Serveur de type: >$SYST_UTIL<"
+debug "Commande: >$0<"
+debug "Options trouvees: >$TEMP<"
+
+# Liste des utilisateurs concernes
+if [ "${PREFIXE_USER:=user}" = "" ] ; then
+	echo >&2 "$0: erreur interne }gt7hp{"; exit 3 ;
+else
+	debug "PREFIXE_USER=${PREFIXE_USER}"
+fi
+
+
+
+# On accepte un seul argument optionnel: le nom de l'archive
+if [ "${NO_TAR}" = 'oui' ] ; then
+	# Pas d'installation dans $HOME des stagiaires sauf .profile et environnement
+	if [ $# -gt 0 ] ; then
+		usage "L'option -n est incompatible avec un nom d'archive"
+		exit 18
+	fi
+else
+	# Detecte une archive
+	case "$#" in
+		1 ) ARCHIVE="${1}" ;;
+		0 ) # sinon tentative de lecture d'une archive
+			set $(ls *.tar* 2>/dev/null)	>/dev/null
+			case "$#" in
+				1 ) ARCHIVE="${1}" ;;
+				0 ) usage "Aucune archive *.tar* n'est trouvee";
+					exit 7 ;;
+				* ) PS3="Selectionnez l'archive a utiliser: "
+					echo "Plusieurs archives sont disponibles ..."
+					select ARCHIVE in $(ls *.tar*) ;
+					do break ; done
+					;;
+			esac ;;
+		* ) usage "Trop de fichiers sur la ligne de commande: >$*<"; exit 1 ;;
+	esac
+fi
+
+
+
+# ---------------------------------------------------------------------------------------------------
+# Traite de l'archive quand il faut en installer une
+# ---------------------------------------------------------------------------------------------------
+if [ "${NO_TAR}" != 'oui' ] ; then
+
+	# Si l'archive pose probleme, on sort illico presto
+	if [ ! -f ${ARCHIVE} ] ; then
+		echo >&2	"L'archive '${ARCHIVE}' n'est pas trouvee"
+		exit 6
+	elif [ ! -r ${ARCHIVE} ] ; then
+		echo >&2	"L'archive '${ARCHIVE}' n'est pas accessible en lecture"
+		exit 9
+	fi
+
+	# On recopie l'archive dans $TMP car on utilisera la copie de l'archive
+	if echo "${ARCHIVE}" | grep '.gz$' 	>/dev/null	2>&1 ; then
+		TMP_ARCH="$TMP/installe-$$.gz"
+	else
+		TMP_ARCH="$TMP/installe-$$"
+	fi
+	cp "${ARCHIVE}" "${TMP_ARCH}"
+	chmod 644 "${TMP_ARCH}"
+
+	# Si l'archive est compactee, on la decompacte tout de suite:
+	if echo "${TMP_ARCH}" |grep '.gz$' 	>/dev/null	2>&1 ; then
+
+		if gunzip "${TMP_ARCH}" ; then
+			TMP_ARCH=$(echo "${TMP_ARCH}" | sed 's/.gz$//')
+			if [ ! -f "${TMP_ARCH}" -o ! -r "${TMP_ARCH}" ] ; then
+				#echo >&2	"L'archive '${ARCHIVE}' n'est pas exploitable apres decompactage"
+				echo >&2	"L'archive '${TMP_ARCH}' n'est pas exploitable apres decompactage"
+				exit 14
+			fi
+		else
+			#echo >&2	"L'archive '${ARCHIVE}' ne peut pas etre decompactee ($?)"
+			echo >&2	"L'archive '${TMP_ARCH}' ne peut pas etre decompactee ($?)"
+			exit 12
+		fi
+	fi
+fi
+
+
+
+# ---------------------------------------------------------------------------------------------------
+# Traite de la liste des utilisateurs
+# ---------------------------------------------------------------------------------------------------
+if ps -e | grep 'ypbind$' >/dev/null ; then # Reseau NIS detecte
+	LISTE_USERS=`ypcat passwd | grep "^${PREFIXE_USER}" | cut -f1 -d':' | sort`
+else
+	LISTE_USERS=`grep "^${PREFIXE_USER}" /etc/passwd | cut -f1 -d':' | sort`
+fi
+
+if [ -z "${LISTE_USERS}" ] ; then
+	echo >&2 "Aucun utilisateur '${PREFIXE_USER}*' n'est trouve"
+	exit 4
+fi
+
+debug "Descend ${TMP_ARCH} dans les repertoires \$HOME des utilisateurs '$PREFIXE_USER*'."
+echo
+
+
+
+# ---------------------------------------------------------------------------------------------------
+# Traite des fichiers de l'environnement de chaque stagiaire
+# ---------------------------------------------------------------------------------------------------
+#
+# fichier .bash_profile de chacun
+BASH_PROFILE="# Fichier de connexion bash ... lit les autres
+
+# Version :	$VERSION
+# Auteur  :	$AUTEUR
+# Original:	$ORIGINAL
+
+[ -t 2 ] && echo >&2 \\\"(debug) debut de $PWD/.bash_profile\\\"
+
+. ~/.profile
+. ~/.bashrc
+
+[ -t 2 ] && echo >&2 \\\"(debug) fin de $PWD/.bash_profile\\\"
+# fin du fichier de connexion"
+
+
+
+# -----------------------------
+# # fichier .profile de chacun
+PROFILE="# Fichier de connexion bourne/posix/ksh/bash
+
+# Version :	$VERSION
+# Auteur  :	$AUTEUR
+# Original:	$ORIGINAL
+
+PATH='$PAT'
+export PATH
+
+EXINIT='se ts=4 sw=4 nu'
+export EXINIT
+
+ENV=\\\$HOME/.kshrc
+export ENV
+${PAGINEUR}${ORAVARS}
+if test -t 1 ; then
+	# Shell de connexion seulement
+	set -o ignoreeof
+fi
+
+# fin du fichier de connexion"
+
+
+
+# -----------------------------
+# fichier .bashrc de chacun
+if ls --color >/dev/null 2>/dev/null
+	then	LSCOLOR=' --color=auto'
+	else	LSCOLOR=''
+fi
+# Ci dessous, which ne dereference pas les liens symboliques
+BASHRC="# Fichier de demarrage de bash
+
+# Version :	$VERSION
+# Auteur  :	$AUTEUR
+# Original:	$ORIGINAL
+
+if [ -f /etc/bashrc ]; then
+	. /etc/bashrc
+fi
+
+alias c=clear
+alias l='`which ls` -l $LSCOLOR'
+alias la='`which ls` -la $LSCOLOR'
+alias lt='`which ls` -lrt $LSCOLOR'
+alias ls='`which ls`$LSCOLOR'
+
+if test -t 1 ; then
+	E2L_LVL=\\\$(pstree -sA \\\$\\\$)
+	E2L_LVL=\\\$((\\\$(tr -- '-' '\\012' <<<\\\$E2L_LVL | grep -c '^bash\\\$')-1))
+	set -o vi
+	PS1=\\\"
+\\\`${WHOAMI}\\\`@\\\`uname -n\\\` (\\\$E2L_LVL)\\\"'
+\\\$PWD '
+
+	if [ \\\"\\\$TERM\\\" = 'xterm' ] ; then
+		PROMPT_COMMAND='echo -en \\\"\\\\033]2;\\\`${WHOAMI}\\\`@\\\`uname -n\\\` \\\\007\\\"'
+	fi
+
+	if test -d Home ; then cd Home ; fi
+fi
+
+# fin du fichier de demarrage"
+
+
+
+# -----------------------------
+# fichier .kshrc de chacun
+# Ci dessous, which ne dereference pas les liens symboliques
+KSHRC="# Fichier de demarrage de ksh
+
+# Version :	$VERSION
+# Auteur  :	$AUTEUR
+# Original: $ORIGINAL
+
+alias c=clear
+
+alias l='`which ls`  -l $LSCOLOR'
+alias la='`which ls` -la $LSCOLOR'
+alias lt='`which ls` -lrt $LSCOLOR'
+alias ls='`which ls` $LSCOLOR'
+
+if test -t 1 ; then
+	PS1=\\\"
+\\\`${WHOAMI}\\\`@\\\`uname -n\\\`\\\"'
+\\\$PWD '
+	set -o vi
+fi
+
+if test -d Home ; then cd Home ; fi
+
+# fin du fichier de demarrage"
+
+
+
+# ---------------------------------------------------------------------------------------------------
+# Pour chaque utilisateur, fait successivement, et dans le bon ordre ...
+#   o renomme les anciens fichiers de l'environnement
+#   o detruit tous fichiers et repertoires
+#   o descend l'archive si demande
+#   o recree des fichiers d'environnement
+#   o sort en renvoyant le code d'erreur de la derniere commande executee
+# ---------------------------------------------------------------------------------------------------
+for U in ${LISTE_USERS} ; do
+	echo ${T_N} "Installation pour '${U}' ... ${T_C}"
+	su - "${U}" -c " \
+		mv -f .bash_logout ..bash_logout.old 2>/dev/null; \
+		mv -f .profile ..profile.old 2>/dev/null; \
+		mv -f .bashrc ..bashrc.old 2>/dev/null; \
+		mv -f .kshrc ..kshrc.old 2>/dev/null; \
+		mv -f .bash_profile ..bash_profile.old 2>/dev/null; \
+		if [ \"${ZERO}\" = 'oui' ]; then rm -fr * .[!.]*; fi; \
+		if [ \"${NO_TAR}\" != 'oui' ] ; then tar xf ${TMP_ARCH}; fi ; \
+		echo \"${PROFILE}\" >.profile; \
+		echo \"${BASHRC}\" >.bashrc; \
+		echo \"${KSHRC}\" >.kshrc; \
+		echo \"${BASH_PROFILE}\" >.bash_profile; \
+		exit "	>/dev/null
+	RET=$?
+	if [ "$RET" -ne 0 ] ; then
+		echo
+		echo " ----------------------------------------------------------------------------------------"	>&2
+		echo " ERREUR ($RET) a l'installation de ${U} : est-il proprietaire de son \$HOME par exemple ?"	>&2
+		echo "               ou peut etre une erreur de mot de passe, ce qui est plus probable ?       "	>&2
+		echo " ----------------------------------------------------------------------------------------"	>&2
+		echo
+		if [ "${FORCE}" != 'oui' ] ; then
+			exit 17
+		fi
+	else
+		echo " ok."
+	fi
+done
+if [ "$DEBUG" != 'oui' ]; then
+	rm -f "${TMP_ARCH}"
+fi
+exit 0
+
+# fin du fichier

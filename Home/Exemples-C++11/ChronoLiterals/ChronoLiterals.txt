@@ -1,0 +1,6 @@
+30s  = 30 secondes
+5min = 5 minutes
+5min = 300 secondes
+24h = 24 heures
+24h = 1440 minutes
+24h = 86400 secondes

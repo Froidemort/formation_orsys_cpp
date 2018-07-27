@@ -1,0 +1,6 @@
+8Triangle
+9Rectangle
+8Polygone
+ ... Le carre d'as !
+5Carre
+entier: >i<

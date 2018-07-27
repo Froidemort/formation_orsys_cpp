@@ -1,0 +1,5 @@
+double( 6)==12
+double( .1)==0.2
+triple( 5.2)==15.6
+quad( '?')==u
+quad( (int)'?')==252

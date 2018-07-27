@@ -1,0 +1,10 @@
+# depslib dependency file v1.0
+1532416131 source:/root/Formation_Cpp/Projects/Greed/src/Test-De.cpp
+	<iostream>
+	"De.h"
+
+1532416634 /root/Formation_Cpp/Projects/Greed/include/De.h
+	"../../Rand/Rand.h"
+
+1532349353 /root/Formation_Cpp/Projects/Rand/Rand.h
+

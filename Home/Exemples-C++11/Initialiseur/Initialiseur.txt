@@ -1,0 +1,9 @@
+Constructeur vide
+Constructeur a un 'int'
+Constructeur a liste
+10-9-8-
+Constructeur a liste
+10-9-8-
+Constructeur a liste
+77-
+Constructeur vide

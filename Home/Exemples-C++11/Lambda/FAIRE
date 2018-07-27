@@ -1,0 +1,42 @@
+// Debut de Home/Exemples-C++11/Lambda/Lambda.cpp
+
+#include <vector>
+#include <iostream>
+#include <algorithm>
+
+
+int main() { // ------------------------------------------------------ 73
+
+/* ne marche pas
+	int i=8 , j=61 ;
+	auto k = []( int const a, int const b) -> int { return a+b; } ;
+	std::cout << "i+j = " << k(i+j) << '\n' ;
+*/
+
+/* ici ca marche
+std::vector<int> some_list{ 1, 2, 3, 4, 5 };
+int total = 0;
+std::for_each(begin(some_list), end(some_list), [&total](int x) {
+	   total += x;
+	});
+std::cout << "total=" << total << '\n' ;
+*/
+
+	// f est de type fonction qui renvoie un 'int' comme souligne '-' 
+    auto f = [] ( int const i) -> int { return 2*i; } ;
+    //                         ------          ---
+	std::cout << "2*7=" << f( 7) << '\n' ;
+
+    // f peut etre copiee dans son pointeur ad hoc
+	int (*func_f)( int const) = f ; // 
+	std::cout << "2*7=" << (*func_f)( 7) << '\n' ;
+
+	// mais on peut se passer du nom 'f'
+	std::cout << "2*7=" 
+	          << []( int const i) -> int { return 2*i; }( 7) << '\n' ;
+
+    // Et du type de retour, car il n'y a pas d'ambiguite
+	std::cout << "2*7=" 
+	          << []( int const i)        { return 2*i; }( 7) << '\n' ;
+
+}   // fin de fichier

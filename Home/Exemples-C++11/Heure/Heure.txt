@@ -1,0 +1,4 @@
+
+    ctime()    Sat Jul 30 08:01:25 2016
+    et 33 millisecondes
+par curiosite sizeof (time_point): 8 et sizeof (time_t): 8

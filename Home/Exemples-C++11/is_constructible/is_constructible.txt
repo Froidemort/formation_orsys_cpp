@@ -1,0 +1,11 @@
+
+ T is ...
+    Constructible from const T&? true
+    Trivially-constructible from const T&? false
+    Trivially-constructible from int? false
+    Constructible from int? false
+    Constructible from char const*? true
+    Nothrow-constructible from char const*? false
+    Move_constructible from const T&? false
+    Trivially-move_constructible from const T&? false
+

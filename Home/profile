@@ -1,0 +1,17 @@
+# Fichier '.../Home/profile' (fichier en ASCII)
+
+# Il y a 2 liens physiques un dans Home des cours de C (Langage C et Programmation systeme)
+# L'autre dans le repertoire Home des cours de C++ (C++ et C++11)
+
+# Les lignes suivantes peuvent etre ajoutees au fichier '.profile' ou '.bash_profile'
+# Elles peuvent aussi etre sourcees par la commande 'source profile'
+
+CFLAGS='-Wall -pthread -std=c11 -g'	# Pour le compilateur Langage C : -std=c11/c99/c89 ou -ansi...
+CPPFLAGS=''							# Pour le preprocesseur C/C++
+CXXFLAGS='-Wall -std=c++11'			# Pour le compilateur C++
+LDFLAGS='-lrt -pthread'				# Pour l'editeur de liens
+EXINIT='set noet tabstop=4 number wrapscan autoindent showmatch shiftwidth=4 visualbell t_vb=' # Pour vim
+
+export CFLAGS CPPFLAGS CXXFLAGS LDFLAGS EXINIT 
+
+# fin de fichier

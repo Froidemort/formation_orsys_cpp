@@ -1,0 +1,6 @@
+5
+3.1416
+g
+g
+4 variables globales
+4 variables globales

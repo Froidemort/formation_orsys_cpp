@@ -1,0 +1,5 @@
+Norme utilisee: 199711
+Actuellement 0 rationnels(s) dans le programme
+6 crees
+On en alloue un: il y en a 7
+On le detruit:  il en reste 6

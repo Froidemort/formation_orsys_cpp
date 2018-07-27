@@ -1,0 +1,54 @@
+Du C++ au C++ en 3 jours	(C++11)
+-----------------------------------
+
+Public: Developpeurs C++ (on ne voit pas le C++, seulement son evolution)
+Pedagogie: Approche completement basee sur la pratique : pas de support livre hormis
+           des canevas d'exercices, et leurs corrections. Environnement Linux/GCC.
+
+
+Premier jour -------------------------------------
+
+1 Matin : Gestion de memoire
+	- variables en pile, en tas, static et globales
+	- operateurs & et *
+	- std::ref
+	- exos
+		. passage d'arguments : ref.cpp
+		. creer un exo qui fait ++ depuis un template
+
+2 Apres-midi: Applications de la gestion memoire
+	- variadics 
+	- unique_ptr -> exo correction d'une fuite memoire
+	- pointeurs 'auto' : shared_ptr, weak_ptr
+	- enumerations fortement typees
+
+Deuxieme jour -------------------------------------
+
+3 Matin : Bibliotheques
+	-- fonctions lambda et 'traits'
+	-- mot clef auto
+	-- gestion du temps avec le namespace chrono
+	-- les expressions regulieres
+
+4 Apres-midi : Nouveautes de la STL version C++11, C++14, C++17
+	-- STL de base : conteneurs, iterateurs, algorithmes, allocateurs
+	-- constructeurs / destructeurs (copie, move)
+	-- nouveaux containers (tuple...)
+
+
+Troiseme jour -------------------------------------
+
+5 Matin : Multithread
+	-- classe std::thread
+	-- Recuperer un resultat avec future<> et async()
+	-- hardware_concurrency()
+
+6 Apres-midi : Concurrence d'acces
+	-- std::atomic
+	-- spinlocks
+	-- semaphores
+
+Le tout avec une approche tres pragmatique: des exercices et des explications des
+difficultes rencontrees par le developpeur C++
+
+Denis Gillain, developpeur Linux/C++ (20 annees de dur labeur++)

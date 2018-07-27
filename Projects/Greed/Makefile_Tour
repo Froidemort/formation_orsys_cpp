@@ -1,0 +1,31 @@
+#!/usr/bin/make -rf
+# Fichier './Corriges/Tour/Makefile'
+# Fichier './Tour/Makefile' (lien physique)
+
+# ------- options employees -----------------
+# -Wall : niveau maximum de 'warnings'
+# -p    : inclut les informations du profiler
+CC   = g++ --std=c++11 -Wall -p
+
+CORE = Makefile include/Tour.h
+PRG  = Test-Tour
+
+test: $(PRG)
+	@./bin/$(PRG)
+	@echo
+
+$(PRG): Tour.o Rand.o $(PRG).o $(CORE)
+	$(CC) -o bin/$(PRG) Tour.o Rand.o $(PRG).o
+	@echo
+
+Rand.o: src/Rand.cpp include/Rand.h
+	$(CC) -c src/Rand.cpp
+	
+%.o: src/%.cpp $(CORE)
+	$(CC) -c $<
+
+cleanrep:
+	@rm -f *.o $(PRG) gmon.out
+	@chmod 644 * ; chmod 755 Makefile
+
+# Fin de Makefile

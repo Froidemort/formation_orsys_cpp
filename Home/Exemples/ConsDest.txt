@@ -1,0 +1,20 @@
+--> Construction de a est global
+--> Construction de b est dans main()
+--> Construction de X est dans foo()
+--> Construction de Y est static dans foo()
+--> Construction de *p dans le tas depuis foo()
+  < Destruction de X est dans foo()
+--> Construction de c est entre {} dans main()
+  < Destruction de c est entre {} dans main()
+--> Construction de t1
+--> Construction de t2
+--> Construction de t3
+--> Construction de X est dans foo()
+--> Construction de *p dans le tas depuis foo()
+  < Destruction de X est dans foo()
+  < Destruction de t3
+  < Destruction de t2
+  < Destruction de t1
+  < Destruction de b est dans main()
+  < Destruction de Y est static dans foo()
+  < Destruction de a est global

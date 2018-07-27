@@ -1,0 +1,5 @@
+essai     : 1023
+Par defaut: 1023
+c
+a - b + d
+1 : 0

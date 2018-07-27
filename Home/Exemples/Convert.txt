@@ -1,0 +1,7 @@
+# Compile sans warning 
+# g++ -Wall Convert.cc -o a.out
+
+u==2   -   f==3.3   -   fon( 2, 3.3)==6.6
+u==2   -   f==3.3   -   fon( '\x02', 3.3)==6.6
+u==2   -   f==3   -   fon( 2, 3)==6
+u==2   -   f==3   -   fon( 2.6, 3)==6

@@ -1,0 +1,15 @@
+test sur Core i7 - stretch 64 bit - GCC 5.3.1 20160224 (norme 201402)
+
+sizeof (long)  == 8
+sizeof (int)   == 4
+sizeof (int*)  == 8
+sizeof NULL    == 8
+sizeof nullptr == 8
+pointeur NULL: 0
+pointeur NULL: (nil)
+
+f( long int) est appelee
+f( long int) est appelee
+f( int*) est appelee
+f( int*) est appelee
+On a bien 2 pointeurs NULL identiques

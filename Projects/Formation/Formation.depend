@@ -1,0 +1,9 @@
+# depslib dependency file v1.0
+1321711200 source:/root/Formation_Cpp/Home/Exemples/Salut.cpp
+	<cstdio>
+	<cstdlib>
+
+1297103543 source:/root/Formation_Cpp/Home/Exemples/Hello.cpp
+	<iostream>
+	<stdlib.h>
+

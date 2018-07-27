@@ -1,0 +1,17 @@
+premier element de v: 10
+dernier element de v: 10
+Le tableau v est vide
+Nouvelle taille: 22
+v[ 11] == 113
+v[ 12] == 35
+Taille apres vidage: 0
+Capacite: 50
+Nouvelle taille: 50
+v[ 44] == 44
+v[ max] == 49
+Nouvelle taille: 5
+0    1    2    3    4    
+at() a leve l'exception std::out_of_range
+4    3    2    1    0    
+Somme w[*]: 200
+v est bien une copie conforme de w
